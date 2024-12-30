@@ -250,7 +250,7 @@
           const runBtn = document.getElementById("run-btn");
           const chatHistory = document.getElementById("main-content");
           
-          const genAI = new GoogleGenerativeAI("AIzaSyDFhm6csuqC-WVDqofyYDF1F6VYShtBhU8"); // Move this to backend
+          const genAI = new GoogleGenerativeAI("API_token"); // Move this to backend
           const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
        
           async function geminiResponse(userInput) {
