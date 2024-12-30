@@ -1,0 +1,25 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+body{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: #000000;
+    
+}
+.photo-container{
+    height: 400px;
+    width: 500px;
+    border-radius: 20px;
+    background-image: url('image.png');
+    background-size: cover;
+    padding-top: 5px;
+    padding-right: 37px;
+    border-radius: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
