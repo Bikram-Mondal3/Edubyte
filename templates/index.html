@@ -250,7 +250,7 @@
           const runBtn = document.getElementById("run-btn");
           const chatHistory = document.getElementById("main-content");
           
-          const genAI = new GoogleGenerativeAI("API_token"); // Move this to backend
+          const genAI = new GoogleGenerativeAI("geminiAPI"); // Move this to backend
           const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
        
           async function geminiResponse(userInput) {
@@ -273,10 +273,10 @@
           }
        
           runBtn.addEventListener('click', async () => {
-            const userInput = chatBox.value;
+            const userInput = `Your name is Edubyte, developed by Edubyte team, powered by Google API and you are a friendly and helpful AI designed to provide instant assistance to me. Your primary goal is to ensure me feel supported and receive accurate, clear, and concise answers to my queries. You may also add different interactive and appropriate emojis to your response. Always maintain a polite, engaging, and approachable tone, making interactions enjoyable and productive. Now don't repeat your name is Edubyte until I ask you to, just instantly answer only to my this response:${chatBox.value}`;
             if (userInput === '') return;
        
-            addMessageToHistory(userInput, true);
+            addMessageToHistory(chatBox.value, true);
             chatBox.value = '';
        
             const loadingDiv = document.createElement('div');
