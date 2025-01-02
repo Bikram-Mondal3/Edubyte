@@ -14,15 +14,16 @@
      }
     
      body {
-        background-color: #f4f4f9;
+        background-color: #202020;
         color: #333;
         font-size: 16px;
         min-height: 100vh;
+        font-family: consolas;
      }
     
    
      header {
-        background-color: #1f2937;
+        background-color: #1b1b1d;
         color: #fff;
         padding: 15px 20px;
         display: flex;
@@ -118,7 +119,7 @@
         scrollbar-color: #4b5563 #374151;
         height: 87%;
         width: 50%;
-        color: #1f2937;
+        color: #fff;
      }
     
      /* Chat input styles */
@@ -133,7 +134,7 @@
      .chat-box {
         height: 50px;
         width: 100%;
-        background-color: #e5e7eb;
+        background-color: #90ee90;
         border: 1px solid #d1d5db;
         border-radius: 25px;
         padding: 10px 50px 10px 20px; /* Added right padding for button */
@@ -153,9 +154,9 @@
      }
     
      .chat-box::placeholder {
-        color: #9ca3af;
+        color: #000;
      }
-    
+
      /* Send button styles */
      .run-btn {
         position: absolute;
@@ -250,7 +251,7 @@
           const runBtn = document.getElementById("run-btn");
           const chatHistory = document.getElementById("main-content");
           
-          const genAI = new GoogleGenerativeAI("geminiAPI"); // Move this to backend
+          const genAI = new GoogleGenerativeAI("AIzaSyCAk4mkNVUtb3Fqi1SoU_a4y6r7_sWhxxs"); // Move this to backend
           const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
        
           async function geminiResponse(userInput) {
@@ -273,13 +274,14 @@
           }
        
           runBtn.addEventListener('click', async () => {
-            const userInput = `Your name is Edubyte, developed by Edubyte team, powered by Google API and you are a friendly and helpful AI designed to provide instant assistance to me. Your primary goal is to ensure me feel supported and receive accurate, clear, and concise answers to my queries. You may also add different interactive and appropriate emojis to your response. Always maintain a polite, engaging, and approachable tone, making interactions enjoyable and productive. Now don't repeat your name is Edubyte until I ask you to, just instantly answer only to my this response:${chatBox.value}`;
+            const userInput = `Your name is Edubyte, developed by Edubyte team, powered by Google API and you are a friendly and helpful AI designed to provide instant assistance to me. Your primary goal is to ensure me feel supported and receive accurate, clear, and concise answers to my queries. You may also add some cool, interactive and appropriate emojis to your response. Always maintain a polite, engaging, and approachable tone, making interactions enjoyable and productive. Now don't repeat your name is Edubyte until I ask you to, just instantly answer only to my this response:${chatBox.value}`;
             if (userInput === '') return;
        
             addMessageToHistory(chatBox.value, true);
             chatBox.value = '';
        
             const loadingDiv = document.createElement('div');
+            loadingDiv.style.marginTop = "7px";
             loadingDiv.textContent = 'Thinking...';
             loadingDiv.className = 'loading-message';
             chatHistory.appendChild(loadingDiv);
