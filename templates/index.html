@@ -35,7 +35,7 @@
      }
     
      header h1 {
-        font-size: 1.5rem;
+        font-size: 2rem;
         font-weight: 600;
      }
     
@@ -120,7 +120,10 @@
         height: 87%;
         width: 50%;
         color: #fff;
-     }
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+      }
     
      /* Chat input styles */
      .chat-container{
@@ -140,7 +143,7 @@
         padding: 10px 50px 10px 20px; /* Added right padding for button */
        
         font-size: 1rem;
-        color: #374151;
+        color: #000;
         outline: none;
         transition: border-color 0.2s ease;
         resize: none;
@@ -156,6 +159,50 @@
      .chat-box::placeholder {
         color: #000;
      }
+
+
+      /* User and AI message styles */
+      .user-message {
+         background-color: #374151;
+         color: white;
+         padding: 10px 15px;
+         border-radius: 10px;
+         margin: 10px 0;
+         align-self: flex-end;
+         max-width: 30%;
+         word-wrap: break-word;
+      }
+
+      .ai-message {
+         background-color: #3b82f6;
+         color: white;
+         padding: 10px 15px;
+         border-radius: 10px;
+         margin: 10px 0;
+         align-self: flex-start;
+         max-width: 100%;
+         word-wrap: break-word;
+      }
+
+      /* Loading message */
+      .loading-message {
+         font-style: italic;
+         color: #d1d5db;
+         margin: 10px 0;
+      }
+
+      /* Animation */
+      @keyframes fadeIn {
+         from {
+            opacity: 0;
+            transform: translateY(10px);
+         }
+         to {
+            opacity: 1;
+            transform: translateY(0);
+         }
+      }
+
 
      /* Send button styles */
      .run-btn {
@@ -217,13 +264,29 @@
             transition: none;
         }
      }
+     .edubyte{
+      font-size: 2rem;
+      font-weight: bold;
+      background: linear-gradient(90deg, #ff7eb3, #ff758c, #ff5c74, #a05195);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-left: 0.5rem;
+     }
+     header .heading{
+      display:flex;
+      flex-direction: row;
+     }
+     
   </style>
 
  
 </head>
 <body>
     <header>
-        <h1>Welcome 👋</h1>
+        <div class="heading">
+         <h1>Welcome to</h1><div class="edubyte">Edubyte!</div>
+        </div>
+        
         <div class="user-profile">
             <i class="fa-solid fa-user"></i>
         </div>
@@ -251,7 +314,7 @@
           const runBtn = document.getElementById("run-btn");
           const chatHistory = document.getElementById("main-content");
           
-          const genAI = new ; // Move this to backend
+          const genAI = new GoogleGenerativeAI("AIzaSyCAk4mkNVUtb3Fqi1SoU_a4y6r7_sWhxxs"); // Move this to backend
           const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
        
           async function geminiResponse(userInput) {
@@ -265,31 +328,44 @@
             }
           }
        
-          function addMessageToHistory(message, isUser = false) {
-            const messageDiv = document.createElement('div');
-            messageDiv.className = isUser ? 'user-message' : 'ai-message';
-            messageDiv.textContent = message;
+          
+       
+        function addMessageToHistory(message, isUser = false) {
+           const messageDiv = document.createElement('div');
+           messageDiv.className = isUser ? 'user-message' : 'ai-message';
+           messageDiv.textContent = message;
+
+            // Add animation for better interaction
+            messageDiv.style.animation = 'fadeIn 0.3s ease-in-out';
+            
             chatHistory.appendChild(messageDiv);
             chatHistory.scrollTop = chatHistory.scrollHeight;
-          }
-       
-          runBtn.addEventListener('click', async () => {
-            const userInput = `Your name is Edubyte, developed by Edubyte team, powered by Google API and you are a friendly and helpful AI designed to provide instant assistance to me. Your primary goal is to ensure me feel supported and receive accurate, clear, and concise answers to my queries. You may also add some cool, interactive and appropriate emojis to your response. Always maintain a polite, engaging, and approachable tone, making interactions enjoyable and productive. Now don't repeat your name is Edubyte until I ask you to, just instantly answer only to my this response:${chatBox.value}`;
+         }
+
+         // Event Listener: Send Message
+         runBtn.addEventListener('click', async () => {
+            // const userInput = chatBox.value.trim();
+            const userInput = `Your name is Edubyte, developed by Edubyte team, powered by Google API and you are a friendly and helpful AI designed to provide instant assistance to me. Your primary goal is to ensure me feel supported and receive accurate, clear answers to my queries. You may also add some cool, interactive and appropriate emojis to your response. Always maintain a polite, engaging, and approachable tone, making interactions enjoyable and productive. Now don't repeat your name is Edubyte until I ask you to, just instantly answer only to my this response:${chatBox.value}`;
             if (userInput === '') return;
-       
-            addMessageToHistory(chatBox.value, true);
-            chatBox.value = '';
-       
+
+            addMessageToHistory(chatBox.value, true); // Add user input to the chat
+            chatBox.value = ''; // Clear the chat input field
+
             const loadingDiv = document.createElement('div');
-            loadingDiv.style.marginTop = "7px";
             loadingDiv.textContent = 'Thinking...';
             loadingDiv.className = 'loading-message';
             chatHistory.appendChild(loadingDiv);
-       
-            const response = await geminiResponse(userInput);
-            chatHistory.removeChild(loadingDiv);
-            addMessageToHistory(response);
-          });
+
+            try {
+               const response = await geminiResponse(userInput); // Fetch AI response
+               chatHistory.removeChild(loadingDiv); // Remove loading text
+               addMessageToHistory(response); // Add AI response to the chat
+            } catch (error) {
+               chatHistory.removeChild(loadingDiv);
+               addMessageToHistory("Error: Unable to process the request. Please try again.");
+            }
+         });
+
        
           chatBox.addEventListener('keypress', (e) => {
             if (e.key === 'Enter' && !e.shiftKey) {
